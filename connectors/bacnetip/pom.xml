@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>connectors</artifactId>
+        <groupId>cn.enncloud.iot.gateway</groupId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>connector-bacnetip</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>cn.enncloud.iot.gateway</groupId>
+            <artifactId>protocols-common</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.enncloud.iot.gateway</groupId>
+            <artifactId>connectors-common</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.3</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>com.infiniteautomation</groupId>-->
+<!--            <artifactId>bacnet4j</artifactId>-->
+<!--            <version>6.0.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.serotonin</groupId>-->
+<!--            <artifactId>bacnet4j</artifactId>-->
+<!--            <version>4.1.6</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.connectorio.binding</groupId>-->
+<!--            <artifactId>bacnet</artifactId>-->
+<!--            <version>2.5.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.code-house.bacnet4j</groupId>-->
+<!--            <artifactId>ip</artifactId>-->
+<!--            <version>1.2.0</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.code-house.bacnet4j</groupId>
+            <artifactId>bacnet4j-wrapper</artifactId>
+            <version>1.3.0-beta3</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.code-house.bacnet4j</groupId>
+            <artifactId>api</artifactId>
+            <version>1.3.0-beta3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.code-house.bacnet4j</groupId>
+            <artifactId>ip</artifactId>
+            <version>1.3.0-beta3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.code-house.bacnet4j</groupId>
+            <artifactId>mstp</artifactId>
+            <version>1.3.0-beta3</version>
+        </dependency>
+    </dependencies>
+
+
+</project>

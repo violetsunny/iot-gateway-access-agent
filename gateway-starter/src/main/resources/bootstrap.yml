@@ -1,0 +1,21 @@
+server:
+  port: 9088
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: ${APP_ID:iot-gateway-ennew}
+#  main:
+#    allow-circular-references: true
+  cloud:
+    nacos:
+      config:
+        isUseCloudNamespaceParsing: false
+        server-addr:  ${NACOS_ADDR:10.203.75.0:8848}
+        namespace: enn-${spring.profiles.active}-public
+        file-extension: yaml
+      discovery:
+        isUseCloudNamespaceParsing: false
+        server-addr:  ${NACOS_ADDR:10.203.75.0:8848}
+        namespace: enn-${spring.profiles.active}-public

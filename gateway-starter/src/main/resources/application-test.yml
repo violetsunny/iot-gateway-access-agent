@@ -1,0 +1,317 @@
+#server:
+#  port: 8088
+#spring:
+#  application:
+#    name: iot-gateway-new
+#  redis:
+#    host: 10.39.68.63
+#    port: 6379
+#    password: MjQxNTkzNj
+#    lettuce:
+#      pool:
+#        max-active: 512
+#    timeout: 20s
+#    serializer: fst
+#  datasource:
+#    url: jdbc:mysql://10.39.68.62:3306/dev_iot_connection_mng?sslMode=disabled&autoReconnect=true&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+#    username: adm_airecon
+#    password: adm2o3rhU$2i
+#    type: com.zaxxer.hikari.HikariDataSource
+#    hikari:
+#      minimum-idle: 5
+#      maximum-pool-size: 50
+#      pool-name: DatebookHikariCP
+#      max-lifetime: 1800000
+#      connection-timeout: 30000
+#      connection-test-query: SELECT 1
+#  kafka:
+#    bootstrap-servers: 10.39.68.59:9092
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer #配置序列化器
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#      batch-size: 1024 #每次发送的消息数量
+#      buffer-memory: 33554432
+#      #procedure要求leader在考虑完成请求之前收到的确认数，用于控制发送记录在服务端的持久化，其值可以为如下：
+#      #acks = 0 如果设置为零，则生产者将不会等待来自服务器的任何确认，该记录将立即添加到套接字缓冲区并视为已发送。在这种情况下，无法保证服务器已收到记录，并且重试配置将不会生效（因为客户端通常不会知道任何故障），为每条记录返回的偏移量始终设置为-1。
+#      #acks = 1 这意味着leader会将记录写入其本地日志，但无需等待所有副本服务器的完全确认即可做出回应，在这种情况下，如果leader在确认记录后立即失败，但在将数据复制到所有的副本服务器之前，则记录将会丢失。
+#      #acks = all 这意味着leader将等待完整的同步副本集以确认记录，这保证了只要至少一个同步副本服务器仍然存活，记录就不会丢失，这是最强有力的保证，这相当于acks = -1的设置。
+#      #可以设置的值为：all, -1, 0, 1
+#      acks: 1
+#    consumer:
+#      #      group-id: ${spring.application.name}-${spring.profiles.active} #group-id
+#      auto-offset-reset: latest
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer #配置反序列化器
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#      properties:
+#        spring.json.trusted.packages: '*'
+#      enable-auto-commit: true
+#      auto-commit-interval: 100
+#
+## 网关连接器以及协议配置
+#ennwiot:
+#  serverId: node1
+#  # 启动的网络组件
+#  connector-mqtt:
+#    name: 标准MQTT Connector
+#    type: mqtt
+#    configuration:
+#      - clientId: script-protocol-test-1
+#        port: 1883
+#        host: enn-emq.fat.ennew.com
+#        password: 123456
+#        username: admin
+#        qos: 0
+#        topics:
+#          - /edge/single/+/+/rtg
+#        protocol:
+#          type: script
+#          name: script-protocol-test
+#          path: http://10.39.68.191:9002/protocol-test/protocol-energy-mqtt.js
+##          path: D:\\protocol-energy-mqtt.js
+#          params:
+#            p1: aaa
+#            p2: bbb
+#
+##  connector-ctwing-mq:
+##    name: ctwing mq Connector
+##    type: ctwing-mq
+##    configuration:
+##      - server: 2000132971.mq-msgpush.ctwing.cn:16651
+##        tenantId: 2000132971
+##        token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMDAwMTMyOTcxIn0.hdVx5BWdAsCCHEkP-Xbz2v8ar1EX5FCJO41aAPnEEmw
+##        topic: enn_data_iot_metric
+##        description: 水培菜
+##        protocol:
+##          path: protocols-demo/gateway-protocol-json-demo/target/gateway-protocol-json-demo.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.demo.JsonDemoProtocol
+##          params:
+##            p1: aaa
+##            p2: bbb
+##
+##  connector-request:
+##    name: xx 三方平台 Connector
+##    type: request
+##    configuration:
+##      -
+##        server: http://10.39.92.182:8080
+##        productId: 1752588739061432322
+##        security:
+##          type: jwt
+##          url: '/open-api/token/v1/oauth/token?client_id=74218621&client_secret=lZsYKDBQILp5uFr6&grant_type=client_credentials'
+##          method: GET
+##          token: obj
+##        description: 立方门禁
+##        mapping:
+##          -
+##            upordown: down
+##            url: "/open-api/custom/v1/sendCommand?doorId=${deviceId}&command=${function}"
+##            serverId: sendCommand
+##            method: POST
+##            timeout: 0.5
+##            scanPeriod:  0.5
+##            httpHeaders:
+##              contentType: application/json
+##              token_key: token
+##            content:
+##              deviceId:
+##              function:
+##
+##        protocol:
+##          name: door-reformer-ocs20240131-request
+##          path: http://10.8.56.206:9000/device/door-reformer-ocs20240131.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.udf.ReformerDoorProtocol
+##
+##
+##  connector-http:
+##    name: 标准http Connector
+##    type: http
+##    configuration:
+##      -
+##        requestPath: reformer
+##        protocol:
+##          name: door-reformer-ocs20240131-server
+##          path: http://10.8.56.206:9000/device/door-reformer-ocs20240131.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.udf.ReformerDoorProtocol
+##          params:
+##            sn: DOOR_ID
+##            metrics:
+##              -
+##                key: TYPE_ID
+##                value: TYPE_ID
+##                ts: DATE
+##
+##  connector-dtu:
+##    name: dtu Connector
+##    type: dtu
+##    configuration:
+##      -
+##        address: 0.0.0.0
+##        port: 22602
+##        bufferSize: 1024
+##        description: 水培果
+##        protocol:
+##          path: \protocols-demo\gateway-protocol-json-demo\target\gateway-protocol-json-demo.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.demo.JsonDemoProtocol
+##          params:
+##            p1: aaa
+##            p2: bbb
+##
+##      - address: 0.0.0.0
+##        port: 22602
+##        bufferSize: 1024
+##        description: 水培果
+##        protocol:
+##          path: \protocols-demo\gateway-protocol-json-demo\target\gateway-protocol-json-demo.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.demo.JsonDemoProtocol
+##          params:
+##            p1: aaa
+##            p2: bbb
+##
+##  connector-tcp:
+##    server:
+##      name: tcpTestServer
+##      configuration:
+##        - address: 0.0.0.0
+##          port: 36001
+##          parserType: LENGTH_FIELD
+##          parserParams:
+##            byteOrder: LITTLE_ENDIAN
+##            maxLength: 10240
+##            lengthFieldOffset: 13
+##            lengthFieldLength: 2
+##            lengthAdjustment: 3
+##            initialBytesToStrip: 0
+##          protocol:
+##            path: http://10.8.56.206:9000/device/std-enn-tcp-jar-with-dependencies.jar
+##            mainClass: cn.enncloud.iot.gateway.protocol.std.EnnStandardTcpProtocol
+##            params:
+##              p1: aaa
+##              p2: bbb
+##
+##  connector-coap:
+##    name: coap 连接器 Connector
+##    type: socket-tcp
+##    port: 2345
+##    protocols:
+##      - requestPath: test1
+##        protocol:
+##          path: \protocols-demo\gateway-protocol-json-demo\target\gateway-protocol-json-demo.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.demo.JsonDemoProtocol
+##          params:
+##            p1: aaa
+##            p2: bbb
+##
+##      - requestPath: test2
+##        protocol:
+##          path: \protocols-demo\gateway-protocol-json-demo\target\gateway-protocol-json-demo.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.demo.JsonDemoProtocol
+##          params:
+##            p1: aaa
+##            p2: bbb
+##
+##  connector-udp:
+##    name: udp 连接器 Connector
+##    type: udp
+##    configuration:
+##      -
+##        port: 26001
+##        description: 水培果
+##        protocol:
+##          path: \protocols-demo\gateway-protocol-json-demo\target\gateway-protocol-json-demo.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.demo.JsonDemoProtocol
+##          params:
+##            p1: aaa
+##            p2: bbb
+##  connector-snmp:
+##    name: snmp 连接器 Connector
+##    type: snmp
+##    configuration:
+##      -
+##        address: 10.8.55.64
+##        port: 161
+##        retry: 2
+##        timeout: 5000
+##        version: 2
+##        intervalMinute: 1
+##        description: ECC800
+##        protocol:
+##          name: tianjing-snmap-device
+##          #          path: http://10.8.56.206:9000/device/std-snmp.jar
+##          path: protocols-std/std-snmp/target/std-snmp.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.snmp.SnmpProtocol
+##          params:
+##            OIDS: 1.3.6.1.4.1.2011.6.178.1.1.31.1.1.4.111,1.3.6.1.4.1.2011.6.178.1.1.31.1.1.4.112,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.2.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.16.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.17.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.90.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.166.4145,1.3.6.1.4.1.2011.6.178.1.1.112.2.1.28.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.5.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.86.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.165.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.7.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.170.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.117.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.141.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.9.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.169.4145,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.2.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.16.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.17.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.90.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.166.4146,1.3.6.1.4.1.2011.6.178.1.1.112.2.1.28.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.5.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.86.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.165.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.7.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.170.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.117.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.141.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.9.4146,1.3.6.1.4.1.2011.6.178.1.1.112.1.1.169.4146
+##  connector-ftp:
+##    name: ftp 连接器 Connector
+##    type: ftp
+##    configuration:
+##      - address: 0.0.0.0
+##        port: 26001
+##        username: admin
+##        password: admin
+##        path: ftp://xxxx.com
+##        intervalMinute: 5
+##        description: 水培果
+##        protocol:
+##          path: \protocols-demo\gateway-protocol-json-demo\target\gateway-protocol-json-demo.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.demo.JsonDemoProtocol
+##          params:
+##            p1: aaa
+##  connector-opcua:
+##    name: opcua 连接器 Connector
+##    type: opcua
+##    configuration:
+##      - endpointUrl: "opc.tcp://MS-JDIUVRNKJDPV:12686/milo"
+##        username: admin
+##        password: admin
+##        intervalMinute: 5
+##        description: 水培果
+##        protocol:
+##          path: \protocols-demo\gateway-protocol-json-demo\target\gateway-protocol-json-demo.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.demo.JsonDemoProtocol
+##          params:
+##            node1: xxxx
+##            node2: xxxx
+##
+##  connector-opcua-asyncio:
+##    name: opcua 连接器 Connector
+##    type: opcua
+##    configuration:
+##      - endpointUrl: "opc.tcp://MS-JDIUVRNKJDPV:12686/milo"
+##        username: admin
+##        password: admin
+##        intervalMinute: 5
+##        description: 水培果
+##        protocol:
+##          path: \protocols-demo\gateway-protocol-json-demo\target\gateway-protocol-json-demo.jar
+##          mainClass: cn.enncloud.iot.gateway.protocol.demo.JsonDemoProtocol
+##          params:
+##            node1: xxxx
+##            node2: xxxx
+#
+#ennew:
+#  iot:
+#    device:
+#      url: https://iot-device-service.fat.ennew.com
+#
+#
+#springdoc:
+#  doc-info:
+#    title: "物联网平台接入模块接口文档"
+#  api-docs:
+#    # 是否开启API文档，true表示开启，false表示关闭
+#    enabled: true
+#    groups:
+#      # 是否开启分组，true表示开启
+#      enabled: true
+#    # API元数据访问路径，默认为/v3/api-docs
+#    path: /v3/api-docs
+#  swagger-ui:
+#    # swagger-ui文档访问路径，默认为/swagger-ui.html
+#    path: /swagger-ui.html
+#  # 分组配置
+#  group-configs:
+#    - group: 1-设备接入网关web接口
+#      # 按包路径匹配
+#      packages-to-scan:
+#        - cn.enncloud.iot.gateway.web
